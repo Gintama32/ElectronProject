@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List</title>
+  <style>
+    body {
+      background-color: #FF761A;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+    #task-container {
+      max-width: 350px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    #task-input-container {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    #task-input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid white;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 16px;
+    }
+    #add-btn {
+      padding: 10px 15px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid white;
+      color: white;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    #task-list {
+      list-style: none;
+      padding: 0;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 10px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 8px;
+      border-radius: 4px;
+    }
+    .task-checkbox {
+      margin-right: 12px;
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+    .task-text {
+      flex: 1;
+    }
+    .completed {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+    #clear-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="task-container">
+    <h1>My Tasks</h1>
+    <div id="task-input-container">
+      <input type="text" id="task-input" placeholder="Add a new task...">
+      <button id="add-btn">Add</button>
+    </div>
+    <ul id="task-list"></ul>
+    <button id="clear-btn">Clear Completed</button>
+  </div>
+  <script>
+    const taskInput = document.getElementById('task-input');
+    const addBtn = document.getElementById('add-btn');
+    const taskList = document.getElementById('task-list');
+    const clearBtn = document.getElementById('clear-btn');
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const taskItem = document.createElement('li');
+        taskItem.className = 'task-item';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'task-checkbox';
+        checkbox.checked = task.completed;
+        
+        const taskText = document.createElement('span');
+        taskText.className = 'task-text';
+        taskText.textContent = task.text;
+        if (task.completed) {
+          taskText.classList.add('completed');
+        }
+        
+        checkbox.addEventListener('change', () => {
+          tasks[index].completed = checkbox.checked;
+          taskText.classList.toggle('completed', checkbox.checked);
+          saveTasks();
+        });
+        
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(taskText);
+        taskList.appendChild(taskItem);
+      });
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (text) {
+        tasks.push({ text, completed: false });
+        taskInput.value = '';
+        saveTasks();
+        renderTasks();
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function clearCompleted() {
+      tasks = tasks.filter(task => !task.completed);
+      saveTasks();
+      renderTasks();
+    }
+
+    addBtn.addEventListener('click', addTask);
+    taskInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addTask();
+    });
+    clearBtn.addEventListener('click', clearCompleted);
+
+    renderTasks();
+  </script>
+</body>
+</html>

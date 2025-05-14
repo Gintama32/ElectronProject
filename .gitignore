@@ -1,0 +1,20 @@
+# Dependency directories
+node_modules/
+
+# Build directories
+dist/
+out/
+release/
+build/
+
+# Cache
+.cache/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Environment files
+.env
+.env.local

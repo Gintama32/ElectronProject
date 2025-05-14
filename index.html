@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Focus App</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #FF761A;
+      height: 100vh;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    #timer-container {
+      margin-right: 100px;
+      text-align: center;
+    }
+    #timer {
+      font-size: 72px;
+      color: white;
+      margin-bottom: 20px;
+    }
+    #controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    button {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      color: white;
+      padding: 10px 25px;
+      font-size: 18px;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+    #todo-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <button id="todo-btn">To-Do List</button>
+  <div id="timer-container">
+    <div id="timer">25:00</div>
+    <div id="controls">
+      <button id="startBtn">Start</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>
