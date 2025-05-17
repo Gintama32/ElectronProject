@@ -3,55 +3,444 @@
 <head>
   <title>Focus App</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #FF761A;
-      height: 100vh;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      font-family: Arial, sans-serif;
-    }
-    #timer-container {
-      margin-right: 100px;
-      text-align: center;
-    }
-    #timer {
-      font-size: 72px;
-      color: white;
-      margin-bottom: 20px;
-    }
-    #controls {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-    }
-    button {
-      background-color: rgba(255, 255, 255, 0.2);
-      border: 2px solid white;
-      color: white;
-      padding: 10px 25px;
-      font-size: 18px;
-      border-radius: 50px;
-      cursor: pointer;
-    }
-    #todo-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-    }
+    /* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FF761A;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  color: white;
+}
+button{
+  cursor:pointer;
+}
+/* Timer Container */
+#timer-container {
+  position: fixed;
+  right: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  z-index: 10;
+}
+
+#timer {
+  font-size: 72px;
+  color: white;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+}
+#startBtn{
+  flex: 2;
+  font-size: 34px;
+  border-radius: 50px;
+}
+#resetBtn{
+  flex:1;
+  border-radius: 50px;
+}
+
+
+/* Taskbar Styles */
+#taskbar {
+  position: fixed;
+  left: -150px;
+  top: 0;
+  height: 100vh;
+  width: 180px;
+  background: rgba(0,0,0,0.7);
+  transition: 0.3s ease-out;
+  z-index: 20;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#taskbar-tab {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  background: #FF761A;
+  color: white;
+  padding: 15px 5px;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  z-index: 5;
+}
+
+#taskbar:hover {
+  left: 0;
+}
+
+/* Todo Button */
+#todo-btn {
+  position: fixed;
+  top: 10px;
+  left: 70px;
+  z-index: 30;
+  transition: left 0.3s ease-out;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  padding: 10px 25px;
+  font-size: 18px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+#taskbar:hover ~ #todo-btn {
+  left: 200px;
+}
+
+/* Timer Settings */
+#timer-settings {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  background: rgba(0,0,0,0.3);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#preset-times, #custom-time {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#custom-time {
+  width: 50px;
+  margin-left: 10px;
+}
+
+/* App Management */
+#pinned-apps {
+  width: 100%;
+  padding: 0 15px;
+  margin-top: 10px;
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+}
+
+.app-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 15px;
+  margin: 5px 0;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  text-align: left;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.app-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.app-icon {
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
+  font-size: 20px;
+  margin-right: 10px;
+  width: 24px;
+  text-align: center;
+}
+
+.app-name {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delete-btn {
+  margin-left: 10px;
+  background: rgba(255,0,0,0.2);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: rgba(255,0,0,0.4);
+}
+
+#add-app-btn {
+  width: calc(100% - 30px);
+  margin: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background: #2c3e50;
+  margin: 15% auto;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.input-group {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+}
+
+.input-group input {
+  flex-grow: 1;
+  padding: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  border-radius: 5px;
+}
+
+#browse-btn, #confirm-add {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background 0.2s;
+}
+
+#browse-btn:hover, #confirm-add:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* Clear All Button */
+#clear-all-btn {
+  width: calc(100% - 30px);
+  margin: 20px 15px 0;
+  background: rgba(255,0,0,0.2);
+  border: 1px solid rgba(255,0,0,0.3);
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#clear-all-btn:hover {
+  background: rgba(255,0,0,0.3);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.3);
+}
+/* YouTube Player Container */
+#music-player-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  text-align: center;
+}
+
+/* Music Card - Remove background */
+#music-card {
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* YouTube Thumbnail */
+#youtube-thumbnail {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 10px;
+  border: 2px solid white;
+  cursor: pointer;
+}
+
+#thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Track Title */
+#track-title {
+  color: white;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Player Controls */
+.player-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.player-controls button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  transition: all 0.2s;
+}
+
+.player-controls button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Hidden YouTube Player */
+#youtube-player {
+  display: none !important;
+}
+
   </style>
 </head>
 <body>
-  <button id="todo-btn">To-Do List</button>
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div id="taskbar-tab">Apps</div>
+    <button id="add-app-btn" class="app-btn">
+      <span class="app-icon">+</span> Add App
+    </button>
+    <div id="pinned-apps"></div>
+  </div>
+
+  <!-- Timer -->
   <div id="timer-container">
     <div id="timer">25:00</div>
     <div id="controls">
-      <button id="startBtn">Start</button>
+      <button id="startBtn">Commit</button>
       <button id="resetBtn">Reset</button>
     </div>
   </div>
+
+  <!-- Todo Button -->
+  <button id="todo-btn">My Grinds</button>
+
+  <!-- Timer Settings -->
+ <!-- Timer Settings -->
+<div id="timer-settings">
+  <select id="preset-times">
+    <option value="25">Pomodoro (25m)</option>
+    <option value="15">Short Break (15m)</option>
+    <option value="5">Quick Break (5m)</option>
+    <option value="custom">Custom</option>
+  </select>
+  <input type="number" id="custom-time" min="1" max="120" placeholder="Min" style="display:none;">
+</div>
+
+  <!-- Add App Modal -->
+  <div id="app-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Add Application</h3>
+      <div class="input-group">
+        <input type="text" id="app-name" placeholder="Application Name">
+      </div>
+      <div class="input-group">
+        <input type="text" id="app-path" placeholder="Path (e.g. C:\path\to\app.exe)">
+        <button id="browse-btn">Browse</button>
+      </div>
+      <button id="confirm-add">Add Application</button>
+    </div>
+  </div>
+  <!-- 🎵 YouTube Music Player Card: Moved Below Timer -->
+<!-- Move this div to be just before the closing </body> tag -->
+<div id="music-player-container">
+  <div id="music-card">
+    <!-- Replace iframe with thumbnail image -->
+    <div id="youtube-thumbnail" onclick="playPauseVideo()">
+      <img id="thumbnail-img" src="https://img.youtube.com/vi/FIVFoNxqMek/hqdefault.jpg">
+    </div>
+    <div id="track-title">Now Playing</div>
+    <div class="player-controls">
+      <button onclick="previousVideo()">⏮️</button>
+      <button onclick="playPauseVideo()">⏯️</button>
+      <button onclick="nextVideo()">⏭️</button>
+    </div>
+  </div>
+  <!-- Hidden iframe for actual playback -->
+  <iframe id="youtube-player" style="display: none;"
+    src="https://www.youtube.com/embed/videoseries?list=PLUjwf6rJ2-0Avm51IbabwKRpzu01-mrm8&enablejsapi=1&autoplay=1"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+  ></iframe>
+</div>
+<script src="https://www.youtube.com/iframe_api"></script>
   <script src="renderer.js"></script>
 </body>
 </html>

@@ -1,0 +1,238 @@
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FF761A;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  color: white;
+  pointer-events: none;
+}
+
+/* Interactive Elements */
+#taskbar, #taskbar *,
+#timer-container, #timer-container *,
+#todo-btn, #timer-settings, #timer-settings *,
+.modal, .modal * {
+  pointer-events: auto;
+}
+
+/* Timer Container */
+#timer-container {
+  position: fixed;
+  right: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  z-index: 10;
+}
+
+#timer {
+  font-size: 72px;
+  color: white;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+}
+
+#startBtn {
+  flex: 2;
+  font-size: 34px;
+  border-radius: 50px;
+  padding: 10px;
+}
+
+#resetBtn {
+  flex: 1;
+  border-radius: 50px;
+  padding: 10px;
+}
+
+/* Taskbar Styles */
+#taskbar {
+  position: fixed;
+  left: -150px;
+  top: 0;
+  height: 100vh;
+  width: 70px;
+  background: rgba(0,0,0,0.7);
+  transition: left 0.3s ease-out;
+  z-index: 1000;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#taskbar:hover {
+  left: 0;
+}
+
+#taskbar-tab {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  background: #FF761A;
+  color: white;
+  padding: 15px 5px;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Todo Button */
+#todo-btn {
+  position: fixed;
+  top: 10px;
+  left: 70px;
+  z-index: 30;
+  transition: left 0.3s ease-out;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  padding: 10px 25px;
+  font-size: 18px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+#taskbar:hover ~ #todo-btn {
+  left: 200px;
+}
+
+/* App Icons */
+#pinned-apps {
+  width: 100%;
+  padding: 10px 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-btn {
+  width: 50px;
+  height: 50px;
+  margin: 5px 0;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.app-icon {
+  font-size: 24px;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+}
+
+.delete-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.app-btn:hover .delete-btn {
+  display: flex;
+}
+
+#add-app-btn {
+  width: 50px;
+  height: 50px;
+  margin: 10px 0;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background: #2c3e50;
+  margin: 15% auto;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.input-group {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+}
+
+.input-group input {
+  flex-grow: 1;
+  padding: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  border-radius: 5px;
+}
+
+#browse-btn, #confirm-add {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 5px;
+}
