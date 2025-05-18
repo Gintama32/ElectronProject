@@ -12,7 +12,63 @@ body {
   font-family: Arial, sans-serif;
   overflow: hidden;
   color: white;
+  transition: background-color 0.5s ease;
 }
+
+/* Focus Mode Overlay */
+#focus-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background 0.5s ease;
+  z-index: 5;
+}
+
+body.focus-mode {
+  background-color: #CC5500;
+}
+
+body.focus-mode #focus-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Focus Mode Timer Enhancement */
+body.focus-mode #timer {
+  transform: scale(1.1);
+  text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Dim non-essential elements in focus mode */
+body.focus-mode #taskbar,
+body.focus-mode #todo-btn,
+body.focus-mode #timer-settings,
+body.focus-mode #music-player-container {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+body.focus-mode #taskbar:hover,
+body.focus-mode #todo-btn:hover,
+body.focus-mode #timer-settings:hover,
+body.focus-mode #music-player-container:hover {
+  opacity: 1;
+}
+
+/* Add focus mode pulse animation to timer */
+@keyframes focus-pulse {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1.1); }
+}
+
+body.focus-mode #timer {
+  animation: focus-pulse 2s infinite ease-in-out;
+}
+
 button{
   cursor:pointer;
 }
@@ -672,6 +728,9 @@ button{
   </style>
 </head>
 <body>
+  <!-- Add Focus Overlay -->
+  <div id="focus-overlay"></div>
+
   <!-- Taskbar -->
   <div id="taskbar">
     <div id="taskbar-tab">Apps</div>
@@ -732,15 +791,24 @@ button{
   <div id="app-modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h3>Add Application</h3>
+      <h3>Add Application or Website</h3>
       <div class="input-group">
+        <select id="add-type">
+          <option value="app">Desktop Application</option>
+          <option value="website">Website</option>
+        </select>
+      </div>
+      <div id="app-input-group" class="input-group">
         <input type="text" id="app-path" placeholder="Application path" readonly>
         <button id="browse-btn">Browse</button>
       </div>
-      <div class="input-group">
-        <input type="text" id="app-name" placeholder="Application name">
+      <div id="website-input-group" class="input-group" style="display: none;">
+        <input type="url" id="website-url" placeholder="Enter website URL (e.g., https://example.com)">
       </div>
-      <button id="confirm-add">Add Application</button>
+      <div class="input-group">
+        <input type="text" id="app-name" placeholder="Display name">
+      </div>
+      <button id="confirm-add">Add</button>
     </div>
   </div>
 
@@ -758,7 +826,7 @@ button{
       </div>
     </div>
   <iframe id="youtube-player" style="display: none;"
-    src="https://www.youtube.com/embed/videoseries?list=PLUjwf6rJ2-0Avm51IbabwKRpzu01-mrm8&enablejsapi=1&autoplay=1"
+    src="https://www.youtube.com/embed/videoseries?list=PLUjwf6rJ2-0Avm51IbabwKRpzu01-mrm8&enablejsapi=1"
     allow="autoplay; encrypted-media"
     allowfullscreen
   ></iframe>

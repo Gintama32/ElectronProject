@@ -113,12 +113,27 @@ function createLeetcodeWindow() {
   })
 }
 
+function createWebsiteWindow(url) {
+  const websiteWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    parent: mainWindow,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  })
+
+  websiteWindow.loadURL(url)
+}
+
 app.whenReady().then(() => {
   createMainWindow()
 
   // IPC Handlers
   ipcMain.handle('open-todo-window', createTodoWindow)
   ipcMain.handle('open-leetcode', createLeetcodeWindow)
+  ipcMain.handle('open-website', (_, url) => createWebsiteWindow(url))
   
   ipcMain.handle('launch-app', async (_, appPath) => {
     if (isInFocusMode) {

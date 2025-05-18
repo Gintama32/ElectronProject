@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   showAppPicker: () => ipcRenderer.invoke('show-app-picker'),
   closeApp: () => ipcRenderer.invoke('close-app'),
   toggleFocusMode: (enabled) => ipcRenderer.invoke('toggle-focus-mode', enabled),
+  openWebsite: (url) => ipcRenderer.invoke('open-website', url),
   // Website blocking functions
   addBlockedSite: (site) => ipcRenderer.invoke('add-blocked-site', site),
   removeBlockedSite: (site) => ipcRenderer.invoke('remove-blocked-site', site),

@@ -22,6 +22,12 @@ const pinnedAppsContainer = document.getElementById('pinned-apps');
 const closeBtn = document.querySelector('.close');
 const missionAccomplishedBtn = document.getElementById('mission-accomplished-btn');
 
+// Add type selector handler
+const addTypeSelect = document.getElementById('add-type');
+const appInputGroup = document.getElementById('app-input-group');
+const websiteInputGroup = document.getElementById('website-input-group');
+const websiteUrlInput = document.getElementById('website-url');
+
 // Initialize
 let pinnedApps = JSON.parse(localStorage.getItem('pinnedApps')) || [];
 
@@ -103,6 +109,9 @@ function startTimer() {
     if (window.electronAPI) {
       window.electronAPI.toggleFocusMode(true);
     }
+    // Add focus mode class
+    document.body.classList.add('focus-mode');
+    
     timer = setInterval(() => {
       if (seconds === 0) {
         if (minutes === 0) {
@@ -134,6 +143,8 @@ function pauseTimer() {
   if (window.electronAPI) {
     window.electronAPI.toggleFocusMode(false);
   }
+  // Remove focus mode class
+  document.body.classList.remove('focus-mode');
 }
 
 function resetTimer() {
@@ -144,6 +155,8 @@ function resetTimer() {
   if (window.electronAPI) {
     window.electronAPI.toggleFocusMode(false);
   }
+  // Remove focus mode class
+  document.body.classList.remove('focus-mode');
 }
 
 // Taskbar Animation
@@ -225,6 +238,8 @@ function renderPinnedApps() {
       if (app.isWebApp) {
         if (app.path === 'leetcode' && window.electronAPI) {
           window.electronAPI.openLeetcode();
+        } else if (window.electronAPI) {
+          window.electronAPI.openWebsite(app.path);
         }
       } else if (window.electronAPI) {
         window.electronAPI.launchApp(app.path);
@@ -255,6 +270,7 @@ function getAppIcon(path) {
   if (app.includes('spotify')) return '🎵';
   if (app.includes('steam')) return '🎮';
   if (app.includes('discord')) return '💬';
+  if (app.startsWith('http') || app.startsWith('https')) return '🌐';
   
   return '📁';
 }
@@ -282,25 +298,6 @@ browseBtn.addEventListener('click', async () => {
         appNameInput.value = path.split('\\').pop().split('/').pop().replace('.exe', '');
       }
     }
-  }
-});
-
-confirmAddBtn.addEventListener('click', () => {
-  playMenuSound();
-  const path = appPathInput.value.trim();
-  const name = appNameInput.value.trim();
-  
-  if (path && name) {
-    pinnedApps.push({ 
-      path, 
-      name,
-      icon: getAppIcon(path)
-    });
-    localStorage.setItem('pinnedApps', JSON.stringify(pinnedApps));
-    renderPinnedApps();
-    modal.style.display = 'none';
-    appPathInput.value = '';
-    appNameInput.value = '';
   }
 });
 
@@ -372,7 +369,8 @@ function onYouTubeIframeAPIReady() {
     playerVars: {
       'autoplay': 0,
       'controls': 0,
-      'mute': 0
+      'mute': 0,
+      'playsinline': 1
     }
   });
 }
@@ -384,6 +382,8 @@ function onPlayerReady() {
       updateThumbnail();
     }
   });
+  // Set initial thumbnail
+  updateThumbnail();
 }
 
 function updateThumbnail() {
@@ -456,3 +456,48 @@ function onPlayerStateChange(event) {
 window.playPauseVideo = playPauseVideo;
 window.previousVideo = previousVideo;
 window.nextVideo = nextVideo;
+
+// Add type selector handler
+addTypeSelect.addEventListener('change', () => {
+  if (addTypeSelect.value === 'website') {
+    appInputGroup.style.display = 'none';
+    websiteInputGroup.style.display = 'flex';
+  } else {
+    appInputGroup.style.display = 'flex';
+    websiteInputGroup.style.display = 'none';
+  }
+});
+
+// Update confirmAddBtn click handler
+confirmAddBtn.addEventListener('click', () => {
+  playMenuSound();
+  let path, name;
+  
+  if (addTypeSelect.value === 'website') {
+    path = websiteUrlInput.value.trim();
+    name = appNameInput.value.trim() || new URL(path).hostname;
+    
+    // Ensure URL has protocol
+    if (!path.startsWith('http://') && !path.startsWith('https://')) {
+      path = 'https://' + path;
+    }
+  } else {
+    path = appPathInput.value.trim();
+    name = appNameInput.value.trim();
+  }
+  
+  if (path && name) {
+    pinnedApps.push({ 
+      path, 
+      name,
+      icon: getAppIcon(path),
+      isWebApp: addTypeSelect.value === 'website'
+    });
+    localStorage.setItem('pinnedApps', JSON.stringify(pinnedApps));
+    renderPinnedApps();
+    modal.style.display = 'none';
+    appPathInput.value = '';
+    websiteUrlInput.value = '';
+    appNameInput.value = '';
+  }
+});
