@@ -39,16 +39,91 @@ button{
   gap: 15px;
   justify-content: center;
 }
-#startBtn{
-  flex: 2;
+
+#startBtn, #resetBtn {
   font-size: 34px;
   border-radius: 50px;
-}
-#resetBtn{
-  flex:1;
-  border-radius: 50px;
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
 }
 
+#startBtn {
+  flex: 2;
+  background: linear-gradient(145deg, #7ddb7d, #66d066);
+  box-shadow: 0 6px 0 #4fb54f,
+              0 8px 10px rgba(0,0,0,0.3);
+}
+
+#resetBtn {
+  flex: 1;
+  font-size: 28px;
+  background: linear-gradient(145deg, #ff9800, #f57c00);
+  box-shadow: 0 6px 0 #e65100,
+              0 8px 10px rgba(0,0,0,0.3);
+}
+
+#startBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #4fb54f,
+              0 10px 15px rgba(0,0,0,0.3);
+}
+
+#resetBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #e65100,
+              0 10px 15px rgba(0,0,0,0.3);
+}
+
+#startBtn:active, #resetBtn:active {
+  transform: translateY(4px);
+}
+
+#startBtn:active {
+  box-shadow: 0 2px 0 #4fb54f,
+              0 4px 5px rgba(0,0,0,0.3);
+}
+
+#resetBtn:active {
+  box-shadow: 0 2px 0 #e65100,
+              0 4px 5px rgba(0,0,0,0.3);
+}
+
+/* Add a subtle inner shadow when pressed */
+#startBtn:active::after, #resetBtn:active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+
+/* Add a subtle glow effect */
+#startBtn::before, #resetBtn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.1), transparent);
+  border-radius: 52px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#startBtn:hover::before, #resetBtn:hover::before {
+  opacity: 1;
+}
 
 /* Taskbar Styles */
 #taskbar {
@@ -90,18 +165,48 @@ button{
   top: 10px;
   left: 70px;
   z-index: 30;
-  transition: left 0.3s ease-out;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
+  transition: left 0.3s ease-out, transform 0.1s ease, box-shadow 0.1s ease;
+  background: linear-gradient(145deg, #2196F3, #1976D2);
+  border: none;
   color: white;
-  padding: 10px 25px;
+  padding: 12px 25px;
   font-size: 18px;
   border-radius: 20px;
   cursor: pointer;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 0 #0D47A1,
+              0 6px 10px rgba(0,0,0,0.3);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
 }
 
-#taskbar:hover ~ #todo-btn {
-  left: 200px;
+#todo-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #0D47A1,
+              0 8px 15px rgba(0,0,0,0.3);
+}
+
+#todo-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #cc5200,
+              0 2px 5px rgba(0,0,0,0.3);
+}
+
+#todo-btn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.1), transparent);
+  border-radius: 22px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#todo-btn:hover::before {
+  opacity: 1;
 }
 
 /* Timer Settings */
@@ -202,7 +307,7 @@ button{
 .modal {
   display: none;
   position: fixed;
-  z-index: 100;
+  z-index: 9999;
   left: 0;
   top: 0;
   width: 100%;
@@ -217,6 +322,7 @@ button{
   width: 400px;
   border-radius: 10px;
   position: relative;
+  color: white;
 }
 
 .close {
@@ -339,11 +445,12 @@ button{
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .player-controls button {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
+  background: linear-gradient(145deg, #ff8533, #ff6600);
+  border: none;
   color: white;
   width: 40px;
   height: 40px;
@@ -354,17 +461,212 @@ button{
   cursor: pointer;
   font-size: 16px;
   padding: 0;
-  transition: all 0.2s;
+  transform-style: preserve-3d;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 #cc5200,
+              0 6px 10px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .player-controls button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #cc5200,
+              0 8px 15px rgba(0,0,0,0.3);
+}
+
+.player-controls button:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 1px 0 #cc5200,
+              0 2px 5px rgba(0,0,0,0.3);
+}
+
+.player-controls button:active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+  pointer-events: none;
 }
 
 /* Hidden YouTube Player */
 #youtube-player {
   display: none !important;
+}
+
+/* Mission Accomplished Button */
+#mission-accomplished-btn {
+  position: fixed;
+  top: 20px;
+  right: 250px;
+  background: linear-gradient(45deg, #FF4081, #F50057);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 25px;
+  box-shadow: 0 4px 0 #C51162,
+              0 6px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#mission-accomplished-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #C51162,
+              0 8px 20px rgba(0,0,0,0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#mission-accomplished-btn:active {
+  transform: translateY(1px);
+}
+
+.loading-spinner {
+  display: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
+
+#mission-accomplished-btn.loading .loading-spinner {
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Sound Effects */
+#success-sound {
+  display: none;
+}
+
+/* Website Blocker Styles */
+#blocker-btn {
+  position: fixed;
+  top: 60px;
+  left: 70px;
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+  border: none;
+  color: white;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 9998;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 0 #962d22,
+              0 6px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+#blocker-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #962d22,
+              0 8px 15px rgba(0,0,0,0.3);
+}
+
+#blocker-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #962d22,
+              0 2px 5px rgba(0,0,0,0.3);
+}
+
+.blocked-sites {
+  margin-top: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.blocked-site {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  margin: 5px 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+}
+
+.blocked-site button {
+  background: rgba(231, 76, 60, 0.7);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.blocked-site button:hover {
+  background: rgba(231, 76, 60, 1);
+}
+
+/* Update Website Blocker Button */
+#blocker-btn {
+  position: fixed;
+  top: 60px;
+  left: 70px;
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+  border: none;
+  color: white;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 9998;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 0 #962d22,
+              0 6px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+/* Add pointer-events for modal */
+#blocker-modal, #blocker-modal * {
+  pointer-events: auto;
+}
+
+/* Update input styles */
+#site-input {
+  width: 100%;
+  padding: 10px;
+  margin-right: 10px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  border-radius: 5px;
+}
+
+#add-site-btn {
+  padding: 10px 20px;
+  background: linear-gradient(145deg, #2ecc71, #27ae60);
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #219a52;
+}
+
+#add-site-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #219a52;
+}
+
+#add-site-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #219a52;
 }
 
   </style>
@@ -388,10 +690,22 @@ button{
     </div>
   </div>
 
+  <!-- Sound Effects -->
+  <audio id="button-click" preload="auto">
+    <source src="button-click.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="media-click" preload="auto">
+    <source src="media-click.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="menu-click" preload="auto">
+    <source src="menu-click.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Todo Button -->
   <button id="todo-btn">My Grinds</button>
 
-  <!-- Timer Settings -->
  <!-- Timer Settings -->
 <div id="timer-settings">
   <select id="preset-times">
@@ -403,44 +717,89 @@ button{
   <input type="number" id="custom-time" min="1" max="120" placeholder="Min" style="display:none;">
 </div>
 
+  <!-- Mission Accomplished Button -->
+  <button id="mission-accomplished-btn">
+    🏆 Mission Accomplished
+    <div class="loading-spinner"></div>
+  </button>
+
+  <!-- Sound Effects -->
+  <audio id="success-sound" preload="auto">
+    <source src="success.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Add App Modal -->
   <div id="app-modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h3>Add Application</h3>
       <div class="input-group">
-        <input type="text" id="app-name" placeholder="Application Name">
+        <input type="text" id="app-path" placeholder="Application path" readonly>
+        <button id="browse-btn">Browse</button>
       </div>
       <div class="input-group">
-        <input type="text" id="app-path" placeholder="Path (e.g. C:\path\to\app.exe)">
-        <button id="browse-btn">Browse</button>
+        <input type="text" id="app-name" placeholder="Application name">
       </div>
       <button id="confirm-add">Add Application</button>
     </div>
   </div>
-  <!-- 🎵 YouTube Music Player Card: Moved Below Timer -->
-<!-- Move this div to be just before the closing </body> tag -->
+
+  <!-- YouTube Music Player Card -->
 <div id="music-player-container">
   <div id="music-card">
-    <!-- Replace iframe with thumbnail image -->
     <div id="youtube-thumbnail" onclick="playPauseVideo()">
       <img id="thumbnail-img" src="https://img.youtube.com/vi/FIVFoNxqMek/hqdefault.jpg">
     </div>
     <div id="track-title">Now Playing</div>
     <div class="player-controls">
-      <button onclick="previousVideo()">⏮️</button>
-      <button onclick="playPauseVideo()">⏯️</button>
-      <button onclick="nextVideo()">⏭️</button>
+        <button onclick="previousVideo()" type="button">⏮️</button>
+        <button onclick="playPauseVideo()" type="button">⏯️</button>
+        <button onclick="nextVideo()" type="button">⏭️</button>
+      </div>
     </div>
-  </div>
-  <!-- Hidden iframe for actual playback -->
   <iframe id="youtube-player" style="display: none;"
     src="https://www.youtube.com/embed/videoseries?list=PLUjwf6rJ2-0Avm51IbabwKRpzu01-mrm8&enablejsapi=1&autoplay=1"
     allow="autoplay; encrypted-media"
     allowfullscreen
   ></iframe>
 </div>
+
 <script src="https://www.youtube.com/iframe_api"></script>
   <script src="renderer.js"></script>
+  <script>
+  // Create success sound using Web Audio API
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  function createSuccessSound() {
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Configure sound
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(587.33, audioContext.currentTime); // D5
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+      gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (error) {
+      console.error('Error creating success sound:', error);
+    }
+  }
+
+  // Make createSuccessSound available globally
+  window.createSuccessSound = createSuccessSound;
+
+  // Initialize audio context on first user interaction
+  document.addEventListener('click', function initAudio() {
+    audioContext.resume();
+    document.removeEventListener('click', initAudio);
+  }, { once: true });
+  </script>
 </body>
 </html>
